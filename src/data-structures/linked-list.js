@@ -235,6 +235,7 @@
         return;
       }
       inverse(next, next.next);
+      next.prev = next.next;
       next.next = current;
     }
 
@@ -242,6 +243,7 @@
       return;
     }
     inverse(this.first, this.first.next);
+    this.first.prev = this.first.next;
     this.first.next = null;
     var temp = this.first;
     this.first = this.last;
@@ -258,21 +260,19 @@
     if (!this.first || !this.first.next) {
       return;
     }
-    var current = this.first.next;
-    var prev = this.first;
-    var temp;
-    while (current) {
-      temp = current.next;
-      current.next = prev;
-      prev.prev = current;
-      prev = current;
-      current = temp;
-    }
-    this.first.next = null;
-    this.last.prev = null;
-    temp = this.first;
-    this.first = prev;
-    this.last = temp;
+    var current = this.first
+    var next
+
+    do {
+      next = current.next
+      current.next = current.prev
+      current.prev = next
+      current = next
+    } while (next)
+
+    var tmp = this.first
+    this.first = this.last
+    this.last = tmp
   };
 
 })(typeof window === 'undefined' ? module.exports : window);
